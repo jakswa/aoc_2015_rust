@@ -8,10 +8,12 @@ struct HappyStuff<'a> {
 }
 
 fn main() {
-    let inp = input("13");
+    let mut inp = input("13");
     let happy_stuff = happy_map(&inp);
     println!("part1 answer: {}", dig(&Vec::new(), &happy_stuff));
-    //println!("part2 answer: {}", part2(&inp.trim()));
+    inp.push_str("Jake would gain 0 happiness units by sitting next to George.");
+    let happy_stuff2 = happy_map(&inp);
+    println!("part2 answer: {}", dig(&Vec::new(), &happy_stuff2));
 }
 
 fn happy_map(inp: &str) -> HappyStuff {
@@ -38,13 +40,13 @@ fn happy_map(inp: &str) -> HappyStuff {
 fn happiness(seats: &Vec<&str>, happy: &HappyStuff) -> i64 {
     let mut sum = 0;
     seats[..].windows(2).for_each(|ab| {
-        sum += happy.map.get(&(ab[0], ab[1])).unwrap();
-        sum += happy.map.get(&(ab[1], ab[0])).unwrap();
+        sum += happy.map.get(&(ab[0], ab[1])).unwrap_or(&0);
+        sum += happy.map.get(&(ab[1], ab[0])).unwrap_or(&0);
     });
 
     let ablen = seats.len();
-    sum += happy.map.get(&(seats[0], seats[ablen - 1])).unwrap();
-    sum += happy.map.get(&(seats[ablen - 1], seats[0])).unwrap();
+    sum += happy.map.get(&(seats[0], seats[ablen - 1])).unwrap_or(&0);
+    sum += happy.map.get(&(seats[ablen - 1], seats[0])).unwrap_or(&0);
     sum
 }
 
